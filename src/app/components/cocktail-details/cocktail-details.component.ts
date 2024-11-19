@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { Cocktail } from '../../interfaces/cocktail.interface';
 import { ModalController } from '@ionic/angular';
 import { CocktailService } from '../../services/cocktail.service';
@@ -38,6 +38,7 @@ import {
     IonListHeader,
     IonText,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CocktailDetailsComponent  implements OnInit {
   @Input() cocktail?: Cocktail;

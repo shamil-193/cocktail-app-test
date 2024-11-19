@@ -26,7 +26,7 @@ export class CocktailService {
         map((response: CocktailResponse) => response.drinks || []),
         catchError(error => {
           this.handleError('searchCocktails', error);
-          return of([]);
+          throw error;
         })
       );
   }
