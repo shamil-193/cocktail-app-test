@@ -1,34 +1,37 @@
 import { Injectable } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 
+export interface ToastOptions {
+  message: string;
+  duration?: number;
+  position?: 'top' | 'bottom' | 'middle';
+  color?: 'primary' | 'secondary' | 'tertiary' | 'success' | 'warning' | 'danger' | 'light' | 'medium' | 'dark';
+  showCloseButton?: boolean;
+}
+
 @Injectable({
   providedIn: 'root'
 })
-export class ErrorHandlerService {
+export class ToastService {
+  private readonly defaultOptions: Omit<ToastOptions, 'message'> = {
+    duration: 3000,
+    position: 'bottom',
+    color: 'danger',
+    showCloseButton: true
+  };
+
   constructor(private toastController: ToastController) {}
 
   async showError(message: string) {
-    console.log('222');
-    const toast = await this.toastController.create({
-      message,
-      duration: 3000,
-      position: 'bottom',
-      color: 'danger',
-      buttons: [
-        {
-          text: 'OK',
-          role: 'cancel'
-        }
-      ]
-    });
-    await toast.present();
-    // const toast = await this.toastController.create({
-    //   message: 'Hello World!',
-    //   duration: 1500,
-    //   position: 'top',
-    // });
+    try {
+      const toast = await this.toastController.create({
+        ...this.defaultOptions,
+        message
+      });
 
-    await toast.present();
-    // }
+      await toast.present();
+    } catch (error) {
+      console.error('Failed to show error toast:', error);
+    }
   }
 }

@@ -1,26 +1,30 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { catchError, map, Observable, of } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { catchError, EMPTY, map, Observable, of } from 'rxjs';
 import { Cocktail, CocktailResponse } from '../interfaces/cocktail.interface';
-import { ErrorHandlerService } from './error-handler.service';
+import { ToastService } from './error-handler.service';
+import { ApiEndpoints } from '../../types';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CocktailService {
-  private apiUrl = 'https://www.thecocktaildb.com/api/json/v1/1';
+  private readonly apiUrl: string = environment.api.baseUrl;
+  private readonly endpoints: ApiEndpoints = environment.api.endpoints;
 
   constructor(
     private readonly http: HttpClient,
-    private readonly errorHandler: ErrorHandlerService,
+    private readonly toast: ToastService,
   ) {}
 
   searchCocktails(name: string): Observable<Cocktail[]> {
-    return this.http.get<CocktailResponse>(`${this.apiUrl}/search.php?s=${name}`)
+    return this.http.get<CocktailResponse>(
+      `${this.apiUrl}${this.endpoints.search}`,
+      { params: { s: name } })
       .pipe(
         map((response: CocktailResponse) => response.drinks || []),
         catchError(error => {
-          console.log('errrr');
           this.handleError('searchCocktails', error);
           return of([]);
         })
@@ -28,14 +32,23 @@ export class CocktailService {
   }
 
   getRandomCocktail(): Observable<Cocktail> {
-    return this.http.get<any>(`${this.apiUrl}/random.php`)
+    return this.http.get<CocktailResponse>(`${this.apiUrl}${this.endpoints.random}`)
       .pipe(
-        map(response => response.drinks[0])
+        map((response: CocktailResponse) => {
+          if (!response.drinks?.length) {
+            throw new Error('No cocktail found');
+          }
+          return response.drinks[0];
+        }),
+        catchError(error => {
+          this.handleError('getRandomCocktail', error);
+          return EMPTY;
+        })
       );
   }
 
-  private handleError(operation: string, error: any): void {
-    let errorMessage = 'An error occurred';
+  private handleError(operation: string, error: HttpErrorResponse): void {
+    let errorMessage: string;
 
     if (error.status === 0) {
       errorMessage = 'No internet connection';
@@ -45,7 +58,6 @@ export class CocktailService {
       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
     }
 
-    console.log('0000');
-    this.errorHandler.showError(`${operation} failed: ${errorMessage}`);
+    this.toast.showError(`${operation} failed: ${errorMessage}`);
   }
 }
