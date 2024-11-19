@@ -4,9 +4,15 @@ import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular/standalo
 
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
+import { provideHttpClient } from '@angular/common/http';
+import { addIcons } from 'ionicons';
+import * as ionIcons from 'ionicons/icons';
+
+addIcons(ionIcons);
 
 bootstrapApplication(AppComponent, {
   providers: [
+    provideHttpClient(),
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideIonicAngular(),
     provideRouter(routes, withPreloading(PreloadAllModules)),
