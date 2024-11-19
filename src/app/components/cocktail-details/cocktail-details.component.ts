@@ -50,7 +50,6 @@ import {
 })
 export class CocktailDetailsComponent {
   @Input() set cocktail(value: Cocktail | undefined) {
-    console.log('get cocktail', value);
     this.cocktailSignal.set(value);
   }
 
