@@ -5,6 +5,7 @@ const config: CapacitorConfig = {
   appName: 'Cocktail Recipes',
   webDir: 'www',
   server: {
+    url: 'http://localhost:8100',
     androidScheme: 'https',
     cleartext: true
   }
