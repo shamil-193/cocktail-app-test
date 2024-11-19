@@ -37,50 +37,59 @@
       </ion-row>
     </ion-grid>
 
-    <div class="ion-text-center ion-padding" *ngIf="isLoading()">
-      <ion-spinner name="circular"></ion-spinner>
-      <p>Searching for cocktails...</p>
-    </div>
+    @if (isLoading()) {
+      <div class="ion-text-center ion-padding">
+        <ion-spinner name="circular"></ion-spinner>
+        <p>Searching for cocktails...</p>
+      </div>
+    }
 
-    <ion-list class="ion-no-padding" *ngIf="!isLoading()">
-      <ion-card *ngFor="let cocktail of cocktails()"
-                (click)="showDetails(cocktail)"
-                class="ion-margin-bottom">
-        <img [src]="cocktail.strDrinkThumb"
-             [alt]="cocktail.strDrink"
-             loading="lazy"/>
-        <ion-card-header>
-          <ion-card-title class="ion-text-wrap">{{ cocktail.strDrink }}</ion-card-title>
-          <ion-card-subtitle>{{ cocktail.strGlass }}</ion-card-subtitle>
-        </ion-card-header>
-      </ion-card>
-    </ion-list>
+    @if (!isLoading()) {
+      <ion-list class="ion-no-padding">
+        @for (cocktail of cocktails(); track cocktail.strDrink) {
+          <ion-card (click)="showDetails(cocktail)"
+                    class="ion-margin-bottom">
+            <img [src]="cocktail.strDrinkThumb"
+                 [alt]="cocktail.strDrink"
+                 loading="lazy"/>
+            <ion-card-header>
+              <ion-card-title class="ion-text-wrap">{{ cocktail.strDrink }}</ion-card-title>
+              <ion-card-subtitle>{{ cocktail.strGlass }}</ion-card-subtitle>
+            </ion-card-header>
+          </ion-card>
+        }
+      </ion-list>
+    }
 
     <!-- No Results State -->
-    <div class="ion-text-center ion-padding" *ngIf="showNoResults()">
-      <ion-icon name="warning-outline"
-                size="large"
-                color="medium">
-      </ion-icon>
-      <p>No cocktails found. Try a different search term.</p>
-      <ion-button fill="clear" (click)="clearSearch()">
-        <ion-icon slot="start" name="refresh-outline"></ion-icon>
-        Clear Search
-      </ion-button>
-    </div>
+    @if (showNoResults()) {
+      <div class="ion-text-center ion-padding">
+        <ion-icon name="warning-outline"
+                  size="large"
+                  color="medium">
+        </ion-icon>
+        <p>No cocktails found. Try a different search term.</p>
+        <ion-button fill="clear" (click)="clearSearch()">
+          <ion-icon slot="start" name="refresh-outline"></ion-icon>
+          Clear Search
+        </ion-button>
+      </div>
+    }
 
     <!-- Error State -->
-    <div class="ion-text-center ion-padding" *ngIf="hasError()">
-      <ion-icon name="alert-circle-outline"
-                size="large"
-                color="danger">
-      </ion-icon>
-      <p>Something went wrong. Please try again later.</p>
-      <ion-button fill="clear" (click)="search()">
-        <ion-icon slot="start" name="refresh-outline"></ion-icon>
-        Try Again
-      </ion-button>
-    </div>
+    @if (hasError()) {
+      <div class="ion-text-center ion-padding">
+        <ion-icon name="alert-circle-outline"
+                  size="large"
+                  color="danger">
+        </ion-icon>
+        <p>Something went wrong. Please try again later.</p>
+        <ion-button fill="clear" (click)="search()">
+          <ion-icon slot="start" name="refresh-outline"></ion-icon>
+          Try Again
+        </ion-button>
+      </div>
+    }
 
   </div>
 </ion-content>

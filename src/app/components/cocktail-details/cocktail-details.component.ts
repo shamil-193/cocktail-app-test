@@ -60,11 +60,11 @@ export class CocktailDetailsComponent {
     }
   }
 
-  protected readonly cocktailSignal: WritableSignal<Cocktail | undefined> = signal<Cocktail | undefined>(undefined);
-  protected readonly errorSignal: WritableSignal<string | null> = signal<string | null>(null);
-  protected readonly isLoadingSignal: WritableSignal<boolean> = signal<boolean>(false);
+  protected cocktailSignal: WritableSignal<Cocktail | undefined> = signal<Cocktail | undefined>(undefined);
+  protected errorSignal: WritableSignal<string | null> = signal<string | null>(null);
+  protected isLoadingSignal: WritableSignal<boolean> = signal<boolean>(false);
 
-  protected readonly ingredients = computed(() => {
+  protected ingredients = computed(() => {
     const cocktail = this.cocktailSignal();
     if (!cocktail) return [];
 

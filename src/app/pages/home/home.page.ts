@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, computed, Signal, signal, WritableSignal } from '@angular/core';
-import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
   IonButton,
@@ -11,7 +10,7 @@ import {
   IonContent,
   IonGrid,
   IonHeader,
-  IonIcon, IonItem,
+  IonIcon,
   IonList,
   IonRow,
   IonSearchbar,
@@ -31,21 +30,21 @@ import { catchError, finalize, of } from 'rxjs';
   styleUrls: ['./home.page.scss'],
   standalone: true,
   providers: [ModalController],
-  imports: [ IonContent, IonItem, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonSearchbar, IonGrid, IonCol, IonRow, IonIcon, IonButton, IonList, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonSpinner],
+  imports: [ IonContent, IonHeader, IonTitle, IonToolbar, FormsModule, IonSearchbar, IonGrid, IonCol, IonRow, IonIcon, IonButton, IonList, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonSpinner],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomePage {
-  searchTerm: WritableSignal<string> = signal<string>('');
-  cocktails: WritableSignal<Cocktail[]> = signal<Cocktail[]>([]);
-  isLoading: WritableSignal<boolean> = signal<boolean>(false);
-  hasError: WritableSignal<boolean> = signal<boolean>(false);
-  hasSearched: WritableSignal<boolean> = signal<boolean>(false);
+  protected searchTerm: WritableSignal<string> = signal<string>('');
+  protected cocktails: WritableSignal<Cocktail[]> = signal<Cocktail[]>([]);
+  protected isLoading: WritableSignal<boolean> = signal<boolean>(false);
+  protected hasError: WritableSignal<boolean> = signal<boolean>(false);
+  protected hasSearched: WritableSignal<boolean> = signal<boolean>(false);
 
-  canSearch: Signal<boolean> = computed<boolean>(() =>
+  protected canSearch: Signal<boolean> = computed<boolean>(() =>
     this.searchTerm().trim().length > 0
   );
 
-  showNoResults: Signal<boolean> = computed<boolean>(() =>
+  protected showNoResults: Signal<boolean> = computed<boolean>(() =>
     !this.isLoading() &&
     !this.hasError() &&
     this.hasSearched() &&
@@ -53,11 +52,11 @@ export class HomePage {
   );
 
   constructor(
-    private cocktailService: CocktailService,
-    private modalCtrl: ModalController
+    private readonly cocktailService: CocktailService,
+    private readonly modalCtrl: ModalController
   ) {}
 
-  search(): void {
+  protected search(): void {
     if (this.canSearch()) {
       this.isLoading.set(true);
       this.hasError.set(false);
@@ -77,11 +76,11 @@ export class HomePage {
     }
   }
 
-  onSearchChange(event: any): void {
+  protected onSearchChange(event: any): void {
     this.searchTerm.set(event.detail.value);
   }
 
-  async getRandomCocktail(): Promise<void> {
+  protected async getRandomCocktail(): Promise<void> {
     const modal = await this.modalCtrl.create({
       component: CocktailDetailsComponent,
       componentProps: {
@@ -91,7 +90,7 @@ export class HomePage {
     return await modal.present();
   }
 
-  async showDetails(cocktail: Cocktail): Promise<void> {
+  protected async showDetails(cocktail: Cocktail): Promise<void> {
     const modal = await this.modalCtrl.create({
       component: CocktailDetailsComponent,
       componentProps: {
@@ -102,7 +101,7 @@ export class HomePage {
     return await modal.present();
   }
 
-  clearSearch(): void {
+  protected clearSearch(): void {
     this.searchTerm.set('');
     this.hasError.set(false);
     this.hasSearched.set(false);
