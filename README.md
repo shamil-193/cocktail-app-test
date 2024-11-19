@@ -1,1 +1,87 @@
-(data:text/plain;charset=utf-8,# Cocktail Recipe Finder App%0A%0AA Single Page Application (SPA) built with Angular, Ionic Framework and Capacitor for searching cocktail recipes. The app can run as a web application and be built as an Android APK.%0A%0A## Prerequisites%0A%0A- Node.js (v14.x or later)%0A- npm (v6.x or later) %0A- Angular CLI (`npm install -g @angular/cli`)%0A- Ionic CLI (`npm install -g @ionic/cli`)%0A- Android Studio (for Android builds)%0A- Java JDK 8 or later%0A%0A## Installation%0A%0A1. Clone the repository%0A```bash%0Agit clone [repository-url]%0Acd cocktail-finder%0A```%0A%0A2. Install dependencies%0A```bash%0Anpm install%0A```%0A%0A## Running the Web Application%0A%0A1. Start the development server%0A```bash%0Aionic serve%0A```%0A%0A2. Open your browser and navigate to `http://localhost:8100`%0A%0A## Building for Android%0A%0A1. Add Android platform%0A```bash%0Aionic cap add android%0A```%0A%0A2. Build the app%0A```bash%0Aionic build%0Aionic cap sync%0A```%0A%0A3. Update native platform code%0A```bash%0Aionic cap copy%0Aionic cap sync%0A```%0A%0A4. Open in Android Studio%0A```bash%0Aionic cap open android%0A```%0A%0A5. Generate Debug APK%0A- In Android Studio:%0A  1. Go to Build > Build Bundle(s) / APK(s) > Build APK(s)%0A  2. The APK will be generated in `android/app/build/outputs/apk/debug/app-debug.apk`%0A%0A- Via Command Line:%0A```bash%0Acd android%0A./gradlew assembleDebug%0A```%0AThe APK will be generated in the same location as above.%0A%0A## Project Structure%0A%0A```%0Asrc/%0A├── app/%0A│   ├── components/        # Reusable components%0A│   ├── pages/            # Application pages%0A│   ├── services/         # Services for API calls%0A│   └── interfaces/       # TypeScript interfaces%0A├── assets/              # Images and other static files%0A└── theme/              # Global SCSS files%0A```%0A%0A## Features%0A%0A- Search cocktails by name%0A- View detailed cocktail information%0A- Get random cocktail suggestions%0A- Responsive design for both web and mobile%0A- Native Android build support%0A%0A## API Reference%0A%0AThis app uses [TheCocktailDB API](https://www.thecocktaildb.com/api.php) for cocktail data.%0A%0A## Development Commands%0A%0A- `ionic serve`: Run development server%0A- `ionic build`: Build web assets%0A- `ionic cap sync`: Sync web assets with native projects%0A- `ionic cap run android -l`: Run on Android device with live reload%0A- `ionic cap run android`: Run on Android device%0A%0A## Troubleshooting%0A%0AIf you encounter any issues:%0A%0A1. Make sure all prerequisites are installed correctly%0A2. Try removing node_modules and running npm install again%0A```bash%0Arm -rf node_modules%0Anpm install%0A```%0A3. For Android build issues:%0A   - Ensure JAVA_HOME is set correctly%0A   - Verify Android Studio and SDK are properly installed%0A   - Check that Gradle is using the correct JDK version%0A%0A## Contributing%0A%0A1. Fork the repository%0A2. Create your feature branch (`git checkout -b feature/AmazingFeature`)%0A3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)%0A4. Push to the branch (`git push origin feature/AmazingFeature`)%0A5. Open a Pull Request%0A%0A## License%0A%0AThis project is licensed under the MIT License - see the LICENSE file for details
+# Cocktail Recipe Finder App
+
+A Single Page Application (SPA) built with Angular, Ionic Framework, and Capacitor for searching cocktail recipes. The app can run as a web application and be built as an Android APK.
+
+## Prerequisites
+
+- Node.js (v14.x or later)
+- npm (v6.x or later)
+- Angular CLI (`npm install -g @angular/cli`)
+- Ionic CLI (`npm install -g @ionic/cli`)
+- Android Studio (for Android builds)
+- Java JDK 8 or later
+
+## Installation
+
+1. Clone the repository
+   ```bash
+   git clone [repository-url]
+   cd cocktail-finder
+   ```
+2. Install dependencies
+  ```bash
+  npm install
+  ```
+## Running the Web Application
+
+1. Start the development server
+   ```bash
+   ng serve
+   ```
+2. Open your browser and navigate to `http://localhost:4200`
+
+
+## Building for Android
+
+1. Add Android platform
+  ```bash
+  ionic cap add android
+  ```
+
+2. Build the app
+  ```bash
+  ionic build
+  ionic cap sync
+  ```
+3. Update native platform code
+  ```bash
+  ionic cap copy
+  ionic cap sync
+  ```
+4. Open in Android Studio
+  ```bash
+  ionic cap open android
+  ```
+5. Generate Debug APK
+   In Android Studio:
+   1. Go to Build > Build Bundle(s) / APK(s) > Build APK(s)
+   2. The APK will be generated in android/app/build/outputs/apk/debug/app-debug.apk
+   
+  Via Command Line:
+  ```bash
+  cd android
+  ./gradlew assembleDebug
+  ```
+The APK will be generated in the same location as above.
+
+## Project Structure
+```
+src/
+├── app/
+│   ├── components/        # Reusable components
+│   ├── pages/             # Application pages
+│   ├── services/          # Services for API calls
+│   └── interfaces/        # TypeScript interfaces
+├── assets/               # Images and other static files
+└── theme/                # Global SCSS files
+```
+## Features
+- Search cocktails by name
+- View detailed cocktail information
+- Get random cocktail suggestions
+- Responsive design for both web and mobile
+- Native Android build support
+
+## API Reference
+This app uses [TheCocktailDB API](https://www.thecocktaildb.com/api.php) for cocktail data.
+
