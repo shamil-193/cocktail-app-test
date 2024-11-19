@@ -1,6 +1,16 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>{{ cocktail?.strDrink }}</ion-title>
+    <ion-title>
+      @if (cocktailSignal(); as cocktail) {
+        {{cocktail.strDrink}}
+      } @else {
+        @if (errorSignal()) {
+          Error
+        } @else {
+          Loading...
+        }
+      }
+    </ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="dismiss()">
         <ion-icon name="close"></ion-icon>
@@ -10,34 +20,63 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-card *ngIf="cocktail">
-    <img [src]="cocktail?.strDrinkThumb" [alt]="cocktail?.strDrink"/>
+  @if (isLoadingSignal()) {
+    <div class="loading-container">
+      <ion-spinner></ion-spinner>
+      <p>Loading cocktail...</p>
+    </div>
+  } @else {
+    @if (errorSignal()) {
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="warning-outline" color="danger"></ion-icon>
+            Error
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <p>{{errorSignal()}}</p>
+          <ion-button expand="block" (click)="retry()" class="ion-margin-top">
+            <ion-icon name="refresh-outline" slot="start"></ion-icon>
+            Try Again
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+    } @else {
+      @if (cocktailSignal(); as cocktail) {
+        <ion-card>
+          <img [src]="cocktail.strDrinkThumb" [alt]="cocktail.strDrink"/>
 
-    <ion-card-header>
-      <ion-card-title>{{ cocktail?.strDrink }}</ion-card-title>
-      <ion-card-subtitle>
-        <ion-chip>
-          <ion-icon name="wine-outline"></ion-icon>
-          <ion-label>{{ cocktail?.strGlass }}</ion-label>
-        </ion-chip>
-      </ion-card-subtitle>
-    </ion-card-header>
+          <ion-card-header>
+            <ion-card-title>{{cocktail.strDrink}}</ion-card-title>
+            <ion-card-subtitle>
+              <ion-chip>
+                <ion-icon name="wine-outline"></ion-icon>
+                <ion-label>{{cocktail.strGlass}}</ion-label>
+              </ion-chip>
+            </ion-card-subtitle>
+          </ion-card-header>
 
-    <ion-card-content>
-      <ion-list>
-        <ion-list-header>
-          <ion-label>Ingredients</ion-label>
-        </ion-list-header>
-        <ion-item *ngFor="let ingredient of ingredients">
-          <ion-icon name="leaf-outline" slot="start"></ion-icon>
-          <ion-label>{{ ingredient }}</ion-label>
-        </ion-item>
-      </ion-list>
+          <ion-card-content>
+            <ion-list>
+              <ion-list-header>
+                <ion-label>Ingredients</ion-label>
+              </ion-list-header>
+              @for (ingredient of ingredients(); track ingredient) {
+                <ion-item>
+                  <ion-icon name="leaf-outline" slot="start"></ion-icon>
+                  <ion-label>{{ingredient}}</ion-label>
+                </ion-item>
+              }
+            </ion-list>
 
-      <ion-text>
-        <h2>Instructions</h2>
-        <p>{{ cocktail?.strInstructions }}</p>
-      </ion-text>
-    </ion-card-content>
-  </ion-card>
+            <ion-text class="instructions-text">
+              <h2>Instructions</h2>
+              <p>{{cocktail.strInstructions}}</p>
+            </ion-text>
+          </ion-card-content>
+        </ion-card>
+      }
+    }
+  }
 </ion-content>

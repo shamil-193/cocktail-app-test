@@ -42,7 +42,7 @@ export class CocktailService {
         }),
         catchError(error => {
           this.handleError('getRandomCocktail', error);
-          return EMPTY;
+          throw error;
         })
       );
   }

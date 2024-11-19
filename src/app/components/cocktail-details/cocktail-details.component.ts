@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  Input,
+  signal,
+  WritableSignal,
+} from '@angular/core';
 import { Cocktail } from '../../interfaces/cocktail.interface';
 import { ModalController } from '@ionic/angular';
 import { CocktailService } from '../../services/cocktail.service';
@@ -8,7 +15,7 @@ import {
   IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonChip,
   IonContent,
   IonHeader,
-  IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonText,
+  IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonSpinner, IonText,
   IonTitle,
   IonToolbar,
 } from '@ionic/angular/standalone';
@@ -37,48 +44,69 @@ import {
     IonItem,
     IonListHeader,
     IonText,
+    IonSpinner,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CocktailDetailsComponent  implements OnInit {
-  @Input() cocktail?: Cocktail;
-  @Input() isRandom: boolean = false;
+export class CocktailDetailsComponent {
+  @Input() set cocktail(value: Cocktail | undefined) {
+    console.log('get cocktail', value);
+    this.cocktailSignal.set(value);
+  }
 
-  ingredients: string[] = [];
-
-  constructor(
-    private modalCtrl: ModalController,
-    private cocktailService: CocktailService
-  ) {}
-
-  ngOnInit() {
-    if (this.isRandom) {
+  @Input() set isRandom(value: boolean) {
+    if (value) {
       this.loadRandomCocktail();
-    } else {
-      this.extractIngredients();
     }
   }
 
-  private loadRandomCocktail() {
-    this.cocktailService.getRandomCocktail().subscribe(cocktail => {
-      this.cocktail = cocktail;
-      this.extractIngredients();
+  protected readonly cocktailSignal: WritableSignal<Cocktail | undefined> = signal<Cocktail | undefined>(undefined);
+  protected readonly errorSignal: WritableSignal<string | null> = signal<string | null>(null);
+  protected readonly isLoadingSignal: WritableSignal<boolean> = signal<boolean>(false);
+
+  protected readonly ingredients = computed(() => {
+    const cocktail = this.cocktailSignal();
+    if (!cocktail) return [];
+
+    const ingredients: string[] = [];
+    for (let i = 1; i <= 15; i++) {
+      const ingredient = cocktail[`strIngredient${i}` as keyof Cocktail];
+
+      if (!ingredient) break;
+
+      if (ingredient) {
+        ingredients.push(ingredient);
+      }
+    }
+    return ingredients;
+  });
+
+  constructor(
+    private readonly modalCtrl: ModalController,
+    private readonly cocktailService: CocktailService
+  ) {}
+
+  private loadRandomCocktail(): void {
+    this.isLoadingSignal.set(true);
+    this.errorSignal.set(null);
+
+    this.cocktailService.getRandomCocktail().subscribe({
+      next: (cocktail) => {
+        this.cocktailSignal.set(cocktail);
+        this.isLoadingSignal.set(false);
+      },
+      error: (error) => {
+        this.errorSignal.set('Failed to load cocktail. Please try again later.');
+        this.isLoadingSignal.set(false);
+      }
     });
   }
 
-  private extractIngredients() {
-    if (!this.cocktail) return;
-
-    this.ingredients = [];
-    for (let i = 1; i <= 15; i++) {
-      const ingredient = this.cocktail[`strIngredient${i}` as keyof Cocktail];
-      if (ingredient) {
-        this.ingredients.push(ingredient);
-      }
-    }
-  }
-
-  dismiss() {
+  protected dismiss(): void {
     this.modalCtrl.dismiss();
   }
+  protected retry(): void {
+    this.loadRandomCocktail();
+  }
+
 }
