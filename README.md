@@ -6,8 +6,8 @@ A Single Page Application (SPA) built with Angular, Ionic Framework, and Capacit
 
 - Node.js (v14.x or later)
 - npm (v6.x or later)
-- Angular CLI (`npm install -g @angular/cli`)
-- Ionic CLI (`npm install -g @ionic/cli`)
+- Angular CLI (v18.x or later)
+- Ionic CLI (v8.x or later)
 - Android Studio (for Android builds)
 - Java JDK 8 or later
 
@@ -15,8 +15,7 @@ A Single Page Application (SPA) built with Angular, Ionic Framework, and Capacit
 
 1. Clone the repository
    ```bash
-   git clone [repository-url]
-   cd cocktail-finder
+   git clone https://github.com/shamil-193/cocktail-app-test.git
    ```
 2. Install dependencies
   ```bash
@@ -28,41 +27,28 @@ A Single Page Application (SPA) built with Angular, Ionic Framework, and Capacit
    ```bash
    ng serve
    ```
-2. Open your browser and navigate to `http://localhost:4200`
+2. Open your browser and navigate to `http://localhost:8100`
 
 
-## Building for Android
+## Building debug APK for Android
 
-1. Add Android platform
+1. Start production build
   ```bash
-  ionic cap add android
+  ng build --configuration=production
   ```
 
-2. Build the app
+2. Add Android platform
   ```bash
-  ionic build
-  ionic cap sync
+  npx cap sync android
   ```
-3. Update native platform code
-  ```bash
-  ionic cap copy
-  ionic cap sync
-  ```
-4. Open in Android Studio
-  ```bash
-  ionic cap open android
-  ```
-5. Generate Debug APK
-   In Android Studio:
-   1. Go to Build > Build Bundle(s) / APK(s) > Build APK(s)
-   2. The APK will be generated in android/app/build/outputs/apk/debug/app-debug.apk
-   
+3. Check is Android SDK installed, ANDROID_HOME и JAVA_HOME environment are setted right
+4. Generate Debug APK
   Via Command Line:
   ```bash
   cd android
   ./gradlew assembleDebug
   ```
-The APK will be generated in the same location as above.
+The APK will be generated in the same location android/app/build/outputs/apk/debug/app-debug.apk
 
 ## Project Structure
 ```

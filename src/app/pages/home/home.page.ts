@@ -98,7 +98,7 @@ export class HomePage {
     }
   }
 
-  protected onSearchChange(event: any): void {
+  protected onSearchChange(event: CustomEvent): void {
     this.searchTerm.set(event.detail.value);
   }
 
