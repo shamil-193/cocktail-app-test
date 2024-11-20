@@ -92,4 +92,14 @@
     }
 
   </div>
+
+  <ion-modal [isOpen]="isModalOpen()">
+    <ng-template>
+      <app-cocktail-details
+        (closeModal)="isModalOpen.set(false)"
+        [cocktail]="currentCocktail()"
+        [isRandom]="isRandom()"
+      ></app-cocktail-details>
+    </ng-template>
+  </ion-modal>
 </ion-content>

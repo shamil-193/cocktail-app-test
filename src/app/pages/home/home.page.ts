@@ -11,7 +11,7 @@ import {
   IonGrid,
   IonHeader,
   IonIcon,
-  IonList,
+  IonList, IonModal,
   IonRow,
   IonSearchbar,
   IonSpinner,
@@ -30,15 +30,38 @@ import { catchError, finalize, of } from 'rxjs';
   styleUrls: ['./home.page.scss'],
   standalone: true,
   providers: [ModalController],
-  imports: [ IonContent, IonHeader, IonTitle, IonToolbar, FormsModule, IonSearchbar, IonGrid, IonCol, IonRow, IonIcon, IonButton, IonList, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonSpinner],
+  imports: [
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    FormsModule,
+    IonSearchbar,
+    IonGrid,
+    IonCol,
+    IonRow,
+    IonIcon,
+    IonButton,
+    IonList,
+    IonCard,
+    IonCardHeader,
+    IonCardTitle,
+    IonCardSubtitle,
+    IonSpinner,
+    IonModal,
+    CocktailDetailsComponent
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomePage {
   protected searchTerm: WritableSignal<string> = signal<string>('');
   protected cocktails: WritableSignal<Cocktail[]> = signal<Cocktail[]>([]);
+  protected currentCocktail: WritableSignal<Cocktail | undefined> = signal<Cocktail | undefined>(undefined);
   protected isLoading: WritableSignal<boolean> = signal<boolean>(false);
   protected hasError: WritableSignal<boolean> = signal<boolean>(false);
   protected hasSearched: WritableSignal<boolean> = signal<boolean>(false);
+  protected isModalOpen: WritableSignal<boolean> = signal<boolean>(false);
+  protected isRandom: WritableSignal<boolean> = signal<boolean>(false);
 
   protected canSearch: Signal<boolean> = computed<boolean>(() =>
     this.searchTerm().trim().length > 0
@@ -53,7 +76,6 @@ export class HomePage {
 
   constructor(
     private readonly cocktailService: CocktailService,
-    private readonly modalCtrl: ModalController
   ) {}
 
   protected search(): void {
@@ -81,24 +103,14 @@ export class HomePage {
   }
 
   protected async getRandomCocktail(): Promise<void> {
-    const modal = await this.modalCtrl.create({
-      component: CocktailDetailsComponent,
-      componentProps: {
-        isRandom: true
-      }
-    });
-    return await modal.present();
+    this.isRandom.set(true);
+    this.isModalOpen.set(true);
   }
 
   protected async showDetails(cocktail: Cocktail): Promise<void> {
-    const modal = await this.modalCtrl.create({
-      component: CocktailDetailsComponent,
-      componentProps: {
-        isRandom: false,
-        cocktail
-      }
-    });
-    return await modal.present();
+    this.isRandom.set(false);
+    this.currentCocktail.set(cocktail);
+    this.isModalOpen.set(true);
   }
 
   protected clearSearch(): void {

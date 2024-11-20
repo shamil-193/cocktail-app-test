@@ -1,13 +1,12 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
-  Input,
+  computed, EventEmitter,
+  Input, Output,
   signal,
   WritableSignal,
 } from '@angular/core';
 import { Cocktail } from '../../interfaces/cocktail.interface';
-import { ModalController } from '@ionic/angular';
 import { CocktailService } from '../../services/cocktail.service';
 import {
   IonButton,
@@ -59,6 +58,8 @@ export class CocktailDetailsComponent {
     }
   }
 
+  @Output() closeModal = new EventEmitter<boolean>();
+
   protected cocktailSignal: WritableSignal<Cocktail | undefined> = signal<Cocktail | undefined>(undefined);
   protected errorSignal: WritableSignal<string | null> = signal<string | null>(null);
   protected isLoadingSignal: WritableSignal<boolean> = signal<boolean>(false);
@@ -81,7 +82,6 @@ export class CocktailDetailsComponent {
   });
 
   constructor(
-    private readonly modalCtrl: ModalController,
     private readonly cocktailService: CocktailService
   ) {}
 
@@ -102,7 +102,7 @@ export class CocktailDetailsComponent {
   }
 
   protected dismiss(): void {
-    this.modalCtrl.dismiss();
+    this.closeModal.emit(true)
   }
   protected retry(): void {
     this.loadRandomCocktail();
