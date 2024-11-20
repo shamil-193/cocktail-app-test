@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { catchError, EMPTY, map, Observable, of } from 'rxjs';
+import { catchError, map, Observable } from 'rxjs';
 import { Cocktail, CocktailResponse } from '../interfaces/cocktail.interface';
 import { ToastService } from './error-handler.service';
 import { ApiEndpoints } from '../../types';
