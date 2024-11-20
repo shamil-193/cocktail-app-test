@@ -14,9 +14,9 @@ A Single Page Application (SPA) built with Angular, Ionic Framework, and Capacit
 ## Installation
 
 1. Clone the repository
-   ```bash
-   git clone https://github.com/shamil-193/cocktail-app-test.git
-   ```
+  ```bash
+  git clone https://github.com/shamil-193/cocktail-app-test.git
+  ```
 2. Install dependencies
   ```bash
   npm install
@@ -24,9 +24,9 @@ A Single Page Application (SPA) built with Angular, Ionic Framework, and Capacit
 ## Running the Web Application
 
 1. Start the development server
-   ```bash
-   ng serve
-   ```
+  ```bash
+  ng serve
+  ```
 2. Open your browser and navigate to `http://localhost:8100`
 
 
